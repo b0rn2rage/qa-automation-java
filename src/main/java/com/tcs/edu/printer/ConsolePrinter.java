@@ -1,3 +1,5 @@
+package com.tcs.edu.printer;
+
 /**
  * Служит для вывода текста в консоль
  * @author Смирнов Антон
