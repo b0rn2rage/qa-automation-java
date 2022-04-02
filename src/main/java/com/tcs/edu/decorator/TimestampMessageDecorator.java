@@ -15,6 +15,7 @@ public class TimestampMessageDecorator {
      * @return Время в формате ISO8601 + {@param message}
      */
     public static String decorate(String message) {
-        return Instant.now() + message;
+        String decoratedMessage = Instant.now() + message;
+        return decoratedMessage;
     }
 }
