@@ -7,14 +7,16 @@ import java.time.Instant;
  * @author Смирнов Антон
  */
 public class TimestampMessageDecorator {
+    private static int messageCount = 0;
     /**
-     * Производит конкатенацию строк, состоит из двух частей:
-     * - время в формате ISO8601 +
-     * - текст, переданный в метод
+     * Декорирует переданное сообщение при помощи конкатенации
      * @param message - Текст, переданный в метод
-     * @return Время в формате ISO8601 + {@param message}
+     * @return порядковый номер сообщения + время в формате ISO8601 + {@param message}
      */
     public static String decorate(String message) {
-        return Instant.now() + message;
+        messageCount ++;
+        final var decoratedMessage = messageCount + " " + Instant.now() + message;
+        return decoratedMessage;
     }
 }
+
