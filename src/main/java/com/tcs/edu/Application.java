@@ -8,5 +8,8 @@ class Application {
         ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
         ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
         ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
+        ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
+        ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
+        ConsolePrinter.print(TimestampMessageDecorator.decorate("Hello World!"));
     }
 }
