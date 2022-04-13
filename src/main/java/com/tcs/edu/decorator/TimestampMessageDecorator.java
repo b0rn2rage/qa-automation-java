@@ -18,9 +18,11 @@ public class TimestampMessageDecorator {
      */
     public static String decorate(String message) {
         messageCount ++;
-        return messageCount % PAGE_SIZE == 0
-                ? String.format("%d %s %s %s", messageCount, Instant.now(), message, "\n ---")
-                : String.format("%d %s %s", messageCount, Instant.now(), message);
+        final var decoratedMessage = String.format("%d %s %s", messageCount, Instant.now(), message);
+        if (messageCount % PAGE_SIZE == 0) {
+            return String.format("%s %s", decoratedMessage, "\n ---");
+        }
+        return decoratedMessage;
     }
 }
 
