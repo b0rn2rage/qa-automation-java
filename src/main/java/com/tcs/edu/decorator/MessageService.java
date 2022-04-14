@@ -8,12 +8,18 @@ import com.tcs.edu.printer.ConsolePrinter;
 public class MessageService {
     /**
      * Процедура, собирающая готовое декорированное сообщение
-     * @param level - Enum, отражающий важность сообщения
-     * @param message - Изначальное НЕ декорированное сообщение, которое в последствии декорируется
+     *
+     * @param level   - Enum, отражающий важность сообщения
+     * @param messages - Принимает на вход массив НЕ декорированных сообщений,
+     *                 которые в последствии декорируются. Длина массива должна быть > 0.
      */
-    public static void buildMessage(Severity level, String message) {
-        String decoratedMessage = PrefixDecorator.decorate(message) + " " +
-                SeverityDecorator.toString(level);
-        ConsolePrinter.print(PageSeparator.separate(decoratedMessage));
+    public static void buildMessage(Severity level, String... messages) {
+        int counter = 0;
+        do {
+            String decoratedMessage = PrefixDecorator.decorate(messages[counter]) + " " +
+                    SeverityDecorator.toString(level);
+            ConsolePrinter.print(PageSeparator.separate(decoratedMessage));
+            counter++;
+        } while (counter < messages.length);
     }
 }
