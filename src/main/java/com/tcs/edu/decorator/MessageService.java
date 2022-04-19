@@ -3,17 +3,16 @@ package com.tcs.edu.decorator;
 import com.tcs.edu.printer.ConsolePrinter;
 
 /**
- * Класс-контроллер, который полностью собирает готовое декорированное сообщение для печати
+ * Сервисный класс для формирования сообщений
  */
 public class MessageService {
     /**
-     * Процедура, собирающая готовое декорированное сообщение
+     * Декорирует и печатает сообщения
      *
      * @param level   - Enum, отражающий важность сообщения
-     * @param messages - Принимает на вход массив НЕ декорированных сообщений,
-     *                 которые в последствии декорируются. Длина массива должна быть > 0.
+     * @param messages - Список входящих сообщений
      */
-    public static void buildMessage(Severity level, String... messages) {
+    public static void decorateAndPrintMessage(Severity level, String... messages) {
         int counter = 0;
         do {
             String decoratedMessage = PrefixDecorator.decorate(messages[counter]) + " " +

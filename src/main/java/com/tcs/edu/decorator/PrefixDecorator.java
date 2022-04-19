@@ -3,7 +3,7 @@ package com.tcs.edu.decorator;
 import java.time.Instant;
 
 /**
- * Класс, который формирует префикс для сообщения
+ * Содержит методы по формированию префикса для сообщений
  */
 public class PrefixDecorator {
     private static int messageCount = 0;
