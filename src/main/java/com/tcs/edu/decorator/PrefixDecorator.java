@@ -16,7 +16,7 @@ public class PrefixDecorator {
      * @return сообщение с префиксом
      */
     public static String decorate(String message) {
-        messageCount ++;
+        messageCount++;
         return String.format("%d %s %s", messageCount, Instant.now(), message);
     }
 }
