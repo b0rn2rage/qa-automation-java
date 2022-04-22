@@ -6,8 +6,8 @@ package com.tcs.edu.printer;
  */
 public class ConsolePrinter {
     /**
-     * Процедура, позволяющая выводить переданную строку текста в консоль
-     * @param message Строка текста, которая будет выведена в консоль
+     * Печатает в консоль переданное сообщение
+     * @param message Строка текста, которая будет напечатана в консоли
      */
     public static void print(String message) {
         System.out.println(message);
