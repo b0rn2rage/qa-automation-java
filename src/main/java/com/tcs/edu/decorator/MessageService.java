@@ -13,7 +13,7 @@ public class MessageService {
      * @param message - сообщение переданное на декорирование и печать
      * @param messages - Список входящих сообщений
      */
-    public static void decorateAndPrintMessage(Severity level, String message, String... messages) {
+    public static void print(Severity level, String message, String... messages) {
         String[] allMessages = new String[messages.length + 1]; // +1 добавляем так как есть обязательный message
         allMessages[0] = message; // нулевой элемент массива = обязательный аргумент message
 

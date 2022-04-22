@@ -5,7 +5,7 @@ import com.tcs.edu.decorator.Severity;
 
 class Application {
     public static void main(String[] args) {
-        MessageService.decorateAndPrintMessage(Severity.MAJOR, "Hello World!", "Hello World!",
+        MessageService.print(Severity.MAJOR, "Hello World!", "Hello World!",
                 "Hello World!", "Hello World!", "Hello World!", "Hello World!");
     }
 }
