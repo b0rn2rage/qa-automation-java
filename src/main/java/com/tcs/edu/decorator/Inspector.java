@@ -12,7 +12,7 @@ public class Inspector {
      * @return false если элемент не уникальный (входит в массив messages),
      * true - если уникальный (такого элемента в массиве нет)
      */
-    public static boolean checkUnique(String message, String[] messages) {
+    public static boolean isUnique(String message, String[] messages) {
         if (messages != null) {
             for (String s : messages) {
                 if (message.equals(s)) {

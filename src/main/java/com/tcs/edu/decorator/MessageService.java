@@ -35,6 +35,9 @@ public class MessageService {
         if (messages != null) {
             String currentDecoratedMessage;
             for (String currentMessage : messages) {
+                if (currentMessage == null) {
+                    continue;
+                }
                 currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage);
                 if (level != null) {
                     currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
@@ -78,6 +81,9 @@ public class MessageService {
             String currentDecoratedMessage;
             if (order == MessageOrder.ASC || order == null) {
                 for (String s : messages) {
+                    if (s == null) {
+                        continue;
+                    }
                     currentDecoratedMessage = PrefixDecorator.addPrefix(s);
                     if (level != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
@@ -86,6 +92,9 @@ public class MessageService {
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int counter = messages.length - 1; counter > -1; counter--) {
+                    if (messages[counter] == null) {
+                        continue;
+                    }
                     currentDecoratedMessage = PrefixDecorator.addPrefix(messages[counter]);
                     if (level != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
@@ -94,6 +103,7 @@ public class MessageService {
                 }
             }
         }
+
     }
 
     /**
@@ -131,41 +141,44 @@ public class MessageService {
             String currentDecoratedMessage;
             // В printedMessages будут хранится НЕ ПОЛНОСТЬЮ напечатанные сообщения с timestamp,
             // а просто список "сырых" messages, которые уже были напечатаны,
-            // так как если хранить вместе с timestamp, то уникальных сообщений не будет никогда
+            // так как если хранить вместе с timestamp, то дублей не будет никогда
             String[] printedMessages = new String[messages.length];
+            int counter = 0;
             if (order == MessageOrder.ASC || order == null) {
                 for (String s : messages) {
+                    if (s == null) {
+                        continue;
+                    }
+                    if (doubling == Doubling.DISTINCT) {
+                        if (Inspector.isUnique(s, printedMessages)) {
+                            printedMessages[counter++] = s;
+                        } else {
+                            continue;
+                        }
+                    }
                     currentDecoratedMessage = PrefixDecorator.addPrefix(s);
                     if (level != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
                     }
-                    if (doubling == Doubling.DOUBLES || doubling == null) {
-                        ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
-                    } else if (doubling == Doubling.DISTINCT) {
-                        boolean unique = Inspector.checkUnique(s, printedMessages);
-                        if (unique) {
-                            ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
-                            int counter = 0;
-                            printedMessages[counter++] = s;
-                        }
-                    }
+                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int i = messages.length - 1; i > -1; i--) {
+                    if (messages[i] == null) {
+                        continue;
+                    }
+                    if (doubling == Doubling.DISTINCT) {
+                        if (Inspector.isUnique(messages[i], printedMessages)) {
+                            printedMessages[counter++] = messages[i];
+                        } else {
+                            continue;
+                        }
+                    }
                     currentDecoratedMessage = PrefixDecorator.addPrefix(messages[i]);
                     if (level != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
                     }
-                    if (doubling == Doubling.DOUBLES || doubling == null) {
-                        ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
-                    } else if (doubling == Doubling.DISTINCT) {
-                        boolean unique = Inspector.checkUnique(messages[i], printedMessages);
-                        if (unique) {
-                            ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
-                            int j = 0;
-                            printedMessages[j++] = messages[i];
-                        }
-                    }
+                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
             }
         }
