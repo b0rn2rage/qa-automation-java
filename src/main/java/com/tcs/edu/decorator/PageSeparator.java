@@ -11,12 +11,13 @@ public class PageSeparator {
     /**
      * Разбивает сообщения по страницам при помощи разделителя "---"
      * если messageCount делится без остатка на PAGE_SIZE, то добавляет после сообщения разделитель
+     *
      * @param message - сообщение
      * @return - если условие true, то возвращает сообщение с разделителем,
      * если false, то возвращает сообщение без разделителя
      */
     public static String separate(String message) {
-        messageCount ++;
+        messageCount++;
         if (messageCount % PAGE_SIZE == 0) {
             return String.format("%s %s", message, "\n ---");
         }
