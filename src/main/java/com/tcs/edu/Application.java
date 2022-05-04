@@ -4,33 +4,27 @@ import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.MessageOrder;
 import com.tcs.edu.decorator.MessageService;
 import com.tcs.edu.decorator.Severity;
+import com.tcs.edu.domain.Message;
 
 class Application {
     public static void main(String[] args) {
-        MessageService.print((Severity) null, (String) null, (String[]) null);
-        MessageService.print(null, (String) null, null, "Hello World!", null, "Hello World!");
-        MessageService.print(Severity.MAJOR, "Hello World!", (String[]) null);
-        MessageService.print(Severity.MINOR, (String) null, "Hello World! 1", "Hello World! 2");
-        MessageService.print(Severity.MINOR, "Hello World! 1", "Hello World! 2", "Hello World! 3");
+        Message message0 = new Message((Severity) null, (String) null);
+        Message message1 = new Message((Severity) null, "Hello World!1");
+        Message message2 = new Message(Severity.REGULAR, "Hello World!2");
+        Message message3 = new Message(Severity.MINOR, "Hello World!3");
+        Message message4 = new Message(Severity.MAJOR, "Hello World!4");
 
-        MessageService.print((Severity) null, (MessageOrder) null, (String) null, (String[]) null);
-        MessageService.print((Severity) null, (MessageOrder) null, "Hello World!",
-                "Hello World! 1", "Hello World! 2", "Hello World! 3");
-        MessageService.print(Severity.MAJOR, MessageOrder.ASC, "Hello World!",
-                "Hello World! 1", "Hello World! 2", "Hello World! 3");
-        MessageService.print(Severity.MINOR, MessageOrder.DESC, "Hello World!",
-                "Hello World! 1", "Hello World! 2", "Hello World! 3");
 
-        MessageService.print(Severity.MINOR, MessageOrder.ASC, (Doubling) null, "Hello World!",
-                "Hello World! 1", "Hello World! 1", "Hello World! 2");
-        MessageService.print(Severity.MINOR, MessageOrder.ASC, Doubling.DISTINCT, "Hello World!",
-                "Hello World! 1", "Hello World! 1", "Hello World! 2");
-        MessageService.print(Severity.MINOR, MessageOrder.ASC, Doubling.DOUBLES, "Hello World!",
-                "Hello World! 1", "Hello World! 1", "Hello World! 2");
-        MessageService.print(Severity.MINOR, MessageOrder.DESC, Doubling.DISTINCT, "Hello World!",
-                "Hello World! 1", "Hello World! 1", "Hello World! 2");
-        MessageService.print(Severity.MINOR, MessageOrder.DESC, Doubling.DOUBLES, "Hello World!",
-                "Hello World! 1", "Hello World! 1", "Hello World! 2");
+        MessageService.log(message0, message1, message2, message3);
 
+        MessageService.log((MessageOrder) null, message1, message2, message3, message4);
+        MessageService.log(MessageOrder.ASC, message1, message2, message3, message4);
+        MessageService.log(MessageOrder.DESC, message1, message2, message3, message4);
+
+        MessageService.log(MessageOrder.ASC, (Doubling) null, message1, message1, message2, message2);
+        MessageService.log(MessageOrder.ASC, Doubling.DOUBLES, message1, message1, message2, message2);
+        MessageService.log(MessageOrder.ASC, Doubling.DISTINCT, message1, message1, message2, message2);
+        MessageService.log(MessageOrder.DESC, Doubling.DOUBLES, message1, message1, message2, message2);
+        MessageService.log(MessageOrder.DESC, Doubling.DISTINCT, message1, message1, message2, message2);
     }
 }

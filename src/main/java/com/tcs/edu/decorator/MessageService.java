@@ -1,5 +1,6 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.domain.Message;
 import com.tcs.edu.printer.ConsolePrinter;
 
 /**
@@ -13,34 +14,33 @@ public class MessageService {
      * - самого сообщения
      * - уровня важности
      * <p>
-     * Не печатает message = null.
-     * Не печатает messages = null.
-     * Если level = null, то сообщение не будет декорировано уровнем важности.
+     * Не печатает сообщения с message.getBody() = null.
+     * Не печатает messages.getBody() = null.
+     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
      *
-     * @param level    - Enum, отражающий важность сообщения
-     * @param message  - Сообщение переданное на декорирование и печать
-     * @param messages - Список дополнительных входящих сообщений
+     * @param message  - Сообщение переданное на декорирование и печать, сообщение может содержать уровень значимости
+     * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
-    public static void print(Severity level, String message, String... messages) {
+    public static void log(Message message, Message... messages) {
 
-        if (message != null) {
+        if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message);
-            if (level != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            if (message.getSeverity() != null) {
+                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
             }
             ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
         }
 
         if (messages != null) {
             String currentDecoratedMessage;
-            for (String currentMessage : messages) {
-                if (currentMessage == null) {
+            for (Message currentMessage : messages) {
+                if (currentMessage.getBody() == null) {
                     continue;
                 }
-                currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage);
-                if (level != null) {
-                    currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+                currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                if (currentMessage.getSeverity() != null) {
+                    currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(currentMessage.getSeverity());
                 }
                 ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
             }
@@ -56,23 +56,22 @@ public class MessageService {
      * Отличительной особенностью данного метода является то,
      * что он позволяет сортировать сообщения переданные в messages.
      * <p>
-     * Не печатает message = null.
-     * Не печатает messages = null.
-     * Если level = null, то сообщение не будет декорировано уровнем важности.
+     * Не печатает сообщения с message.getBody() = null.
+     * Не печатает messages.getBody() = null.
+     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
      * Если order = null, то messages не будут отсортированы
      *
-     * @param level    - Enum, отражающий важность сообщения
      * @param order    - Enum, регулирующий метод сортировки сообщений
-     * @param message  - Сообщение переданное на декорирование и печать
-     * @param messages - Список дополнительных входящих сообщений
+     * @param message  - Сообщение переданное на декорирование и печать, сообщение может содержать уровень значимости
+     * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
-    public static void print(Severity level, MessageOrder order, String message, String... messages) {
+    public static void log(MessageOrder order, Message message, Message... messages) {
 
-        if (message != null) {
+        if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message);
-            if (level != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            if (message.getSeverity() != null) {
+                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
             }
             ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
         }
@@ -80,24 +79,25 @@ public class MessageService {
         if (messages != null) {
             String currentDecoratedMessage;
             if (order == MessageOrder.ASC || order == null) {
-                for (String s : messages) {
-                    if (s == null) {
+                for (Message currentMessage : messages) {
+                    if (currentMessage.getBody() == null) {
                         continue;
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(s);
-                    if (level != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+                    currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                    if (currentMessage.getSeverity() != null) {
+                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(currentMessage.getSeverity());
                     }
                     ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int counter = messages.length - 1; counter > -1; counter--) {
-                    if (messages[counter] == null) {
+                    if (messages[counter].getBody() == null) {
                         continue;
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[counter]);
-                    if (level != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[counter].getBody());
+                    if (messages[counter].getSeverity() != null) {
+                        currentDecoratedMessage = currentDecoratedMessage + " " +
+                                SeverityDecorator.toString(messages[counter].getSeverity());
                     }
                     ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
@@ -115,24 +115,23 @@ public class MessageService {
      * Отличительной особенностью данного метода является то,
      * что он позволяет регулировать уникальность элементов, передаваемых в messages
      * <p>
-     * Не печатает message = null.
-     * Не печатает messages = null.
-     * Если level = null, то сообщение не будет декорировано уровнем важности.
+     * Не печатает сообщения с message.getBody() = null.
+     * Не печатает messages.getBody() = null.
+     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
      * Если order = null, то messages не будут отсортированы
-     * Если doubling = null, то дубли будут разрешены
+     * Если doubling = null, то дубли в messages будут разрешены
      *
-     * @param level    - Enum, отражающий важность сообщения
      * @param order    - Enum, регулирующий метод сортировки сообщений
-     * @param doubling - Enum, определяющий будут ли выводиться на печать дублирующиеся элементы из массива messages
+     * @param doubling - Enum, определяющий будут ли выводиться на печать дублирующиеся элементы из messages
      * @param message  - Сообщение переданное на декорирование и печать
      * @param messages - Список дополнительных входящих сообщений
      */
-    public static void print(Severity level, MessageOrder order, Doubling doubling, String message, String... messages) {
-        if (message != null) {
+    public static void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
+        if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message);
-            if (level != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            if (message.getSeverity() != null) {
+                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
             }
             ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
         }
@@ -145,38 +144,40 @@ public class MessageService {
             String[] printedMessages = new String[messages.length];
             int counter = 0;
             if (order == MessageOrder.ASC || order == null) {
-                for (String s : messages) {
-                    if (s == null) {
+                for (Message currentMessage : messages) {
+                    if (currentMessage.getBody() == null) {
                         continue;
                     }
                     if (doubling == Doubling.DISTINCT) {
-                        if (Inspector.isUnique(s, printedMessages)) {
-                            printedMessages[counter++] = s;
+                        if (Inspector.isUnique(currentMessage.getBody(), printedMessages)) {
+                            printedMessages[counter++] = currentMessage.getBody();
                         } else {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(s);
-                    if (level != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+                    currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                    if (currentMessage.getSeverity() != null) {
+                        currentDecoratedMessage = currentDecoratedMessage + " "
+                                + SeverityDecorator.toString(currentMessage.getSeverity());
                     }
                     ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int i = messages.length - 1; i > -1; i--) {
-                    if (messages[i] == null) {
+                    if (messages[i].getBody() == null) {
                         continue;
                     }
                     if (doubling == Doubling.DISTINCT) {
-                        if (Inspector.isUnique(messages[i], printedMessages)) {
-                            printedMessages[counter++] = messages[i];
+                        if (Inspector.isUnique(messages[i].getBody(), printedMessages)) {
+                            printedMessages[counter++] = messages[i].getBody();
                         } else {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[i]);
-                    if (level != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(level);
+                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[i].getBody());
+                    if (messages[i].getSeverity() != null) {
+                        currentDecoratedMessage = currentDecoratedMessage + " " +
+                                SeverityDecorator.toString(messages[i].getSeverity());
                     }
                     ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
                 }
