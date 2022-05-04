@@ -6,8 +6,8 @@ import com.tcs.edu.decorator.Severity;
  * Класс с текстом сообщения и параметрами сообщения
  */
 public class Message {
-    private Severity severity;
-    private String body;
+    private final Severity severity;
+    private final String body;
 
     /**
      * Конструктор класса
@@ -19,16 +19,8 @@ public class Message {
         this.body = body;
     }
 
-    public void setSeverity(Severity severity) {
-        this.severity = severity;
-    }
-
     public Severity getSeverity() {
         return severity;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
     }
 
     public String getBody() {
