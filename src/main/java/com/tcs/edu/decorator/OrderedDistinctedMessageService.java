@@ -1,13 +1,27 @@
 package com.tcs.edu.decorator;
 
-import com.tcs.edu.domain.Message;
-import com.tcs.edu.domain.MessageService;
-import com.tcs.edu.printer.ConsolePrinter;
+import com.tcs.edu.domain.*;
+
 
 /**
  * Сервисный класс для формирования сообщений
  */
 public class OrderedDistinctedMessageService implements MessageService {
+
+    private final Printer printer;
+    private final MessageDecorator prefixDecorator;
+    private final MessageDecorator severityDecorator;
+    private final PageDecorator pageDecorator;
+
+    public OrderedDistinctedMessageService(Printer printer,
+                                           MessageDecorator prefixDecorator,
+                                           MessageDecorator severityDecorator,
+                                           PageDecorator pageDecorator) {
+        this.printer = printer;
+        this.prefixDecorator = prefixDecorator;
+        this.severityDecorator = severityDecorator;
+        this.pageDecorator = pageDecorator;
+    }
 
     /**
      * Формирует и печатает декорированные сообщения, состоящие из:
@@ -23,36 +37,7 @@ public class OrderedDistinctedMessageService implements MessageService {
      * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
     public void log(Message message, Message... messages) {
-
-        ConsolePrinter printer = new ConsolePrinter();
-        PrefixDecorator prefixDecorator = new PrefixDecorator();
-        SeverityDecorator severityDecorator = new SeverityDecorator();
-        PageSeparator pageDecorator = new PageSeparator();
-
-        if (message.getBody() != null) {
-            String currentDecoratedMessage;
-            currentDecoratedMessage = prefixDecorator.decorate(message);
-            if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " "
-                        + severityDecorator.decorate(message);
-            }
-            printer.print(pageDecorator.decorate(currentDecoratedMessage));
-        }
-
-        if (messages != null) {
-            String currentDecoratedMessage;
-            for (Message currentMessage : messages) {
-                if (currentMessage.getBody() == null) {
-                    continue;
-                }
-                currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
-                if (currentMessage.getSeverity() != null) {
-                    currentDecoratedMessage = currentDecoratedMessage + " "
-                            + severityDecorator.decorate(currentMessage);
-                }
-                printer.print(pageDecorator.decorate(currentDecoratedMessage));
-            }
-        }
+        this.log(MessageOrder.ASC, Doubling.DOUBLES, message, messages);
     }
 
     /**
@@ -74,50 +59,7 @@ public class OrderedDistinctedMessageService implements MessageService {
      * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
     public void log(MessageOrder order, Message message, Message... messages) {
-
-        ConsolePrinter printer = new ConsolePrinter();
-        PrefixDecorator prefixDecorator = new PrefixDecorator();
-        SeverityDecorator severityDecorator = new SeverityDecorator();
-        PageSeparator pageDecorator = new PageSeparator();
-
-        if (message.getBody() != null) {
-            String currentDecoratedMessage;
-            currentDecoratedMessage = prefixDecorator.decorate(message);
-            if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " "
-                        + severityDecorator.decorate(message);
-            }
-            printer.print(pageDecorator.decorate(currentDecoratedMessage));
-        }
-
-        if (messages != null) {
-            String currentDecoratedMessage;
-            if (order == MessageOrder.ASC || order == null) {
-                for (Message currentMessage : messages) {
-                    if (currentMessage.getBody() == null) {
-                        continue;
-                    }
-                    currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
-                    if (currentMessage.getSeverity() != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " +
-                                severityDecorator.decorate(currentMessage);
-                    }
-                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
-                }
-            } else if (order == MessageOrder.DESC) {
-                for (int counter = messages.length - 1; counter > -1; counter--) {
-                    if (messages[counter].getBody() == null) {
-                        continue;
-                    }
-                    currentDecoratedMessage = prefixDecorator.decorate(messages[counter]);
-                    if (messages[counter].getSeverity() != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " +
-                                severityDecorator.decorate(messages[counter]);
-                    }
-                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
-                }
-            }
-        }
+        this.log(order, Doubling.DOUBLES, message, messages);
     }
 
     /**
@@ -141,12 +83,6 @@ public class OrderedDistinctedMessageService implements MessageService {
      * @param messages - Список дополнительных входящих сообщений
      */
     public void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-
-        ConsolePrinter printer = new ConsolePrinter();
-        PrefixDecorator prefixDecorator = new PrefixDecorator();
-        SeverityDecorator severityDecorator = new SeverityDecorator();
-        PageSeparator pageDecorator = new PageSeparator();
-
         if (message.getBody() != null) {
             String currentDecoratedMessage;
             currentDecoratedMessage = prefixDecorator.decorate(message);
