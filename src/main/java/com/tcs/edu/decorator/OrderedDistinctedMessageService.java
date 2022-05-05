@@ -1,12 +1,13 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.domain.Message;
+import com.tcs.edu.domain.MessageService;
 import com.tcs.edu.printer.ConsolePrinter;
 
 /**
  * Сервисный класс для формирования сообщений
  */
-public class MessageService {
+public class OrderedDistinctedMessageService implements MessageService {
 
     /**
      * Формирует и печатает декорированные сообщения, состоящие из:
@@ -21,15 +22,21 @@ public class MessageService {
      * @param message  - Сообщение переданное на декорирование и печать, сообщение может содержать уровень значимости
      * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
-    public static void log(Message message, Message... messages) {
+    public void log(Message message, Message... messages) {
+
+        ConsolePrinter printer = new ConsolePrinter();
+        PrefixDecorator prefixDecorator = new PrefixDecorator();
+        SeverityDecorator severityDecorator = new SeverityDecorator();
+        PageSeparator pageDecorator = new PageSeparator();
 
         if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            currentDecoratedMessage = prefixDecorator.decorate(message);
             if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
+                currentDecoratedMessage = currentDecoratedMessage + " "
+                        + severityDecorator.decorate(message);
             }
-            ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+            printer.print(pageDecorator.decorate(currentDecoratedMessage));
         }
 
         if (messages != null) {
@@ -38,11 +45,12 @@ public class MessageService {
                 if (currentMessage.getBody() == null) {
                     continue;
                 }
-                currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
                 if (currentMessage.getSeverity() != null) {
-                    currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(currentMessage.getSeverity());
+                    currentDecoratedMessage = currentDecoratedMessage + " "
+                            + severityDecorator.decorate(currentMessage);
                 }
-                ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+                printer.print(pageDecorator.decorate(currentDecoratedMessage));
             }
         }
     }
@@ -65,15 +73,21 @@ public class MessageService {
      * @param message  - Сообщение переданное на декорирование и печать, сообщение может содержать уровень значимости
      * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
      */
-    public static void log(MessageOrder order, Message message, Message... messages) {
+    public void log(MessageOrder order, Message message, Message... messages) {
+
+        ConsolePrinter printer = new ConsolePrinter();
+        PrefixDecorator prefixDecorator = new PrefixDecorator();
+        SeverityDecorator severityDecorator = new SeverityDecorator();
+        PageSeparator pageDecorator = new PageSeparator();
 
         if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            currentDecoratedMessage = prefixDecorator.decorate(message);
             if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
+                currentDecoratedMessage = currentDecoratedMessage + " "
+                        + severityDecorator.decorate(message);
             }
-            ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+            printer.print(pageDecorator.decorate(currentDecoratedMessage));
         }
 
         if (messages != null) {
@@ -83,27 +97,27 @@ public class MessageService {
                     if (currentMessage.getBody() == null) {
                         continue;
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                    currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
                     if (currentMessage.getSeverity() != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(currentMessage.getSeverity());
+                        currentDecoratedMessage = currentDecoratedMessage + " " +
+                                severityDecorator.decorate(currentMessage);
                     }
-                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int counter = messages.length - 1; counter > -1; counter--) {
                     if (messages[counter].getBody() == null) {
                         continue;
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[counter].getBody());
+                    currentDecoratedMessage = prefixDecorator.decorate(messages[counter]);
                     if (messages[counter].getSeverity() != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " +
-                                SeverityDecorator.toString(messages[counter].getSeverity());
+                                severityDecorator.decorate(messages[counter]);
                     }
-                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             }
         }
-
     }
 
     /**
@@ -126,14 +140,21 @@ public class MessageService {
      * @param message  - Сообщение переданное на декорирование и печать
      * @param messages - Список дополнительных входящих сообщений
      */
-    public static void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
+    public void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
+
+        ConsolePrinter printer = new ConsolePrinter();
+        PrefixDecorator prefixDecorator = new PrefixDecorator();
+        SeverityDecorator severityDecorator = new SeverityDecorator();
+        PageSeparator pageDecorator = new PageSeparator();
+
         if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = PrefixDecorator.addPrefix(message.getBody());
+            currentDecoratedMessage = prefixDecorator.decorate(message);
             if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " " + SeverityDecorator.toString(message.getSeverity());
+                currentDecoratedMessage = currentDecoratedMessage + " "
+                        + severityDecorator.decorate(message);
             }
-            ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+            printer.print(pageDecorator.decorate(currentDecoratedMessage));
         }
 
         if (messages != null) {
@@ -155,12 +176,12 @@ public class MessageService {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(currentMessage.getBody());
+                    currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
                     if (currentMessage.getSeverity() != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " "
-                                + SeverityDecorator.toString(currentMessage.getSeverity());
+                                + severityDecorator.decorate(currentMessage);
                     }
-                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
                 for (int i = messages.length - 1; i > -1; i--) {
@@ -174,12 +195,12 @@ public class MessageService {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = PrefixDecorator.addPrefix(messages[i].getBody());
+                    currentDecoratedMessage = prefixDecorator.decorate(messages[i]);
                     if (messages[i].getSeverity() != null) {
                         currentDecoratedMessage = currentDecoratedMessage + " " +
-                                SeverityDecorator.toString(messages[i].getSeverity());
+                                severityDecorator.decorate(messages[i]);
                     }
-                    ConsolePrinter.print(PageSeparator.separate(currentDecoratedMessage));
+                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             }
         }

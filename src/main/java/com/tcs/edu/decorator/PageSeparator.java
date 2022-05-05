@@ -1,10 +1,12 @@
 package com.tcs.edu.decorator;
 
+import com.tcs.edu.domain.PageDecorator;
+
 /**
  * Класс, позволяющий разбивать сообщения на "страницы", при помощи разделителя "---"
  * Количество сообщений на одной странице определяется переменной PAGE_SIZE
  */
-public class PageSeparator {
+public class PageSeparator implements PageDecorator {
     private static int messageCount = 0;
     private static final int PAGE_SIZE = 2;
 
@@ -12,11 +14,11 @@ public class PageSeparator {
      * Разбивает сообщения по страницам при помощи разделителя "---"
      * если messageCount делится без остатка на PAGE_SIZE, то добавляет после сообщения разделитель
      *
-     * @param message - сообщение
+     * @param message - строковое сообщение
      * @return - если условие true, то возвращает сообщение с разделителем,
      * если false, то возвращает сообщение без разделителя
      */
-    public static String separate(String message) {
+    public String decorate(String message) {
         messageCount++;
         if (messageCount % PAGE_SIZE == 0) {
             return String.format("%s %s", message, "\n ---");
