@@ -9,17 +9,14 @@ import com.tcs.edu.domain.*;
 public class OrderedDistinctedMessageService implements MessageService {
 
     private final Printer printer;
-    private final MessageDecorator prefixDecorator;
-    private final MessageDecorator severityDecorator;
+    private final MessageDecorator messageDecorator;
     private final PageDecorator pageDecorator;
 
     public OrderedDistinctedMessageService(Printer printer,
-                                           MessageDecorator prefixDecorator,
-                                           MessageDecorator severityDecorator,
+                                           MessageDecorator messageDecorator,
                                            PageDecorator pageDecorator) {
         this.printer = printer;
-        this.prefixDecorator = prefixDecorator;
-        this.severityDecorator = severityDecorator;
+        this.messageDecorator = messageDecorator;
         this.pageDecorator = pageDecorator;
     }
 
@@ -29,9 +26,8 @@ public class OrderedDistinctedMessageService implements MessageService {
      * - самого сообщения
      * - уровня важности
      * <p>
-     * Не печатает сообщения с message.getBody() = null.
-     * Не печатает messages.getBody() = null.
-     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
+     * Если поле body класса Message имеет значение = null, то сообщение не будет выведено на печать
+     * Если поле severity класса Message имеет значение = null, то сообщение не будет декорировано уровнем важности
      *
      * @param message  - Сообщение переданное на декорирование и печать, сообщение может содержать уровень значимости
      * @param messages - Список дополнительных входящих сообщений, сообщения могут содержать уровень значимости
@@ -49,9 +45,8 @@ public class OrderedDistinctedMessageService implements MessageService {
      * Отличительной особенностью данного метода является то,
      * что он позволяет сортировать сообщения переданные в messages.
      * <p>
-     * Не печатает сообщения с message.getBody() = null.
-     * Не печатает messages.getBody() = null.
-     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
+     * Если поле body класса Message имеет значение = null, то сообщение не будет выведено на печать
+     * Если поле severity класса Message имеет значение = null, то сообщение не будет декорировано уровнем важности
      * Если order = null, то messages не будут отсортированы
      *
      * @param order    - Enum, регулирующий метод сортировки сообщений
@@ -71,9 +66,8 @@ public class OrderedDistinctedMessageService implements MessageService {
      * Отличительной особенностью данного метода является то,
      * что он позволяет регулировать уникальность элементов, передаваемых в messages
      * <p>
-     * Не печатает сообщения с message.getBody() = null.
-     * Не печатает messages.getBody() = null.
-     * Если message.getSeverity()/messages.getSeverity() = null, то сообщение не будет декорировано уровнем важности.
+     * Если поле body класса Message имеет значение = null, то сообщение не будет выведено на печать
+     * Если поле severity класса Message имеет значение = null, то сообщение не будет декорировано уровнем важности
      * Если order = null, то messages не будут отсортированы
      * Если doubling = null, то дубли в messages будут разрешены
      *
@@ -85,11 +79,7 @@ public class OrderedDistinctedMessageService implements MessageService {
     public void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
         if (message.getBody() != null) {
             String currentDecoratedMessage;
-            currentDecoratedMessage = prefixDecorator.decorate(message);
-            if (message.getSeverity() != null) {
-                currentDecoratedMessage = currentDecoratedMessage + " "
-                        + severityDecorator.decorate(message);
-            }
+            currentDecoratedMessage = messageDecorator.decorate(message);
             printer.print(pageDecorator.decorate(currentDecoratedMessage));
         }
 
@@ -112,11 +102,7 @@ public class OrderedDistinctedMessageService implements MessageService {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = prefixDecorator.decorate(currentMessage);
-                    if (currentMessage.getSeverity() != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " "
-                                + severityDecorator.decorate(currentMessage);
-                    }
+                    currentDecoratedMessage = messageDecorator.decorate(currentMessage);
                     printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             } else if (order == MessageOrder.DESC) {
@@ -131,11 +117,7 @@ public class OrderedDistinctedMessageService implements MessageService {
                             continue;
                         }
                     }
-                    currentDecoratedMessage = prefixDecorator.decorate(messages[i]);
-                    if (messages[i].getSeverity() != null) {
-                        currentDecoratedMessage = currentDecoratedMessage + " " +
-                                severityDecorator.decorate(messages[i]);
-                    }
+                    currentDecoratedMessage = messageDecorator.decorate(messages[i]);
                     printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
             }

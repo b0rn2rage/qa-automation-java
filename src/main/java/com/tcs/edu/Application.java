@@ -14,8 +14,7 @@ class Application {
         Message message4 = new Message(Severity.MAJOR, "Hello World!4");
         MessageService service = new OrderedDistinctedMessageService(
                 new ConsolePrinter(),
-                new PrefixDecorator(),
-                new SeverityDecorator(),
+                new MessageDecoratorImpl(),
                 new PageSeparator()
         );
 
