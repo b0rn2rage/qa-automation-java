@@ -12,6 +12,7 @@ class Application {
         Message message2 = new Message(Severity.REGULAR, "Hello World!2");
         Message message3 = new Message(Severity.MINOR, "Hello World!3");
         Message message4 = new Message(Severity.MAJOR, "Hello World!4");
+        Message message5 = new Message(Severity.MAJOR, "Hello World!4");
         MessageService service = new OrderedDistinctedMessageService(
                 new ConsolePrinter(),
                 new MessageDecoratorImpl(),
@@ -29,5 +30,10 @@ class Application {
         service.log(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message2, message2);
         service.log(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message3);
         service.log(MessageOrder.DESC, Doubling.DOUBLES, message1, message2, message3, message3);
+
+        System.out.println(message5);
+        System.out.println(message5.equals(message3));
+        System.out.println(message5.equals(message4));
+        System.out.println(message5.hashCode());
     }
 }
