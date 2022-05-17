@@ -1,12 +1,13 @@
 package com.tcs.edu.decorator;
 
 import com.tcs.edu.domain.*;
+import com.tcs.edu.printer.ValidatedService;
 
 
 /**
  * Сервисный класс для формирования сообщений
  */
-public class OrderedDistinctedMessageService implements MessageService {
+public class OrderedDistinctedMessageService extends ValidatedService implements MessageService {
 
     private final Printer printer;
     private final MessageDecorator messageDecorator;
@@ -77,49 +78,47 @@ public class OrderedDistinctedMessageService implements MessageService {
      * @param messages - Список дополнительных входящих сообщений
      */
     public void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-        if (message.getBody() != null) {
+        if (super.isArgsValid(message)) {
             String currentDecoratedMessage;
             currentDecoratedMessage = messageDecorator.decorate(message);
             printer.print(pageDecorator.decorate(currentDecoratedMessage));
         }
 
-        if (messages != null) {
-            String currentDecoratedMessage;
-            // В printedMessages будут хранится НЕ ПОЛНОСТЬЮ напечатанные сообщения с timestamp,
-            // а просто список "сырых" messages, которые уже были напечатаны,
-            // так как если хранить вместе с timestamp, то дублей не будет никогда
-            String[] printedMessages = new String[messages.length];
-            int counter = 0;
-            if (order == MessageOrder.ASC || order == null) {
-                for (Message currentMessage : messages) {
-                    if (currentMessage.getBody() == null) {
+        String currentDecoratedMessage;
+        // В printedMessages будут хранится НЕ ПОЛНОСТЬЮ напечатанные сообщения с timestamp,
+        // а просто список "сырых" messages, которые уже были напечатаны,
+        // так как если хранить вместе с timestamp, то дублей не будет никогда
+        String[] printedMessages = new String[messages.length];
+        int counter = 0;
+        if (order == MessageOrder.ASC || order == null) {
+            for (Message currentMessage : messages) {
+                if (!super.isArgsValid(currentMessage)) {
+                    continue;
+                }
+                if (doubling == Doubling.DISTINCT) {
+                    if (Inspector.isUnique(currentMessage.getBody(), printedMessages)) {
+                        printedMessages[counter++] = currentMessage.getBody();
+                    } else {
                         continue;
                     }
-                    if (doubling == Doubling.DISTINCT) {
-                        if (Inspector.isUnique(currentMessage.getBody(), printedMessages)) {
-                            printedMessages[counter++] = currentMessage.getBody();
-                        } else {
-                            continue;
-                        }
-                    }
-                    currentDecoratedMessage = messageDecorator.decorate(currentMessage);
-                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
-            } else if (order == MessageOrder.DESC) {
-                for (int i = messages.length - 1; i > -1; i--) {
-                    if (messages[i].getBody() == null) {
+                currentDecoratedMessage = messageDecorator.decorate(currentMessage);
+                printer.print(pageDecorator.decorate(currentDecoratedMessage));
+            }
+        } else if (order == MessageOrder.DESC) {
+            for (int i = messages.length - 1; i > -1; i--) {
+                if (!super.isArgsValid(messages[i])) {
+                    continue;
+                }
+                if (doubling == Doubling.DISTINCT) {
+                    if (Inspector.isUnique(messages[i].getBody(), printedMessages)) {
+                        printedMessages[counter++] = messages[i].getBody();
+                    } else {
                         continue;
                     }
-                    if (doubling == Doubling.DISTINCT) {
-                        if (Inspector.isUnique(messages[i].getBody(), printedMessages)) {
-                            printedMessages[counter++] = messages[i].getBody();
-                        } else {
-                            continue;
-                        }
-                    }
-                    currentDecoratedMessage = messageDecorator.decorate(messages[i]);
-                    printer.print(pageDecorator.decorate(currentDecoratedMessage));
                 }
+                currentDecoratedMessage = messageDecorator.decorate(messages[i]);
+                printer.print(pageDecorator.decorate(currentDecoratedMessage));
             }
         }
     }
