@@ -3,7 +3,7 @@ package com.tcs.edu.printer;
 import com.tcs.edu.domain.Message;
 
 /**
- * Используется для валидации входных параметров
+ * Базовый класс, содержит методы валидации параметров
  */
 public abstract class ValidatedService {
 
