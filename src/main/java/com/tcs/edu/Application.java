@@ -19,21 +19,22 @@ class Application {
                 new PageSeparator()
         );
 
-        service.log(message0, message1, message2, message3, message4);
+//        service.log((MessageOrder) null, message1, message2, message3);
+//        service.log(MessageOrder.ASC, message1, message2, message3);
+//        service.log(MessageOrder.DESC, message1, message2, message3, message4);
+//
+//        service.log(MessageOrder.ASC, (Doubling) null, message1, message2, message3, message4);
+//        service.log(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message2, message2);
+//        service.log(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message2, message2);
+//        service.log(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message3);
+//        service.log(MessageOrder.DESC, Doubling.DOUBLES, message1, message2, message3, message3);
+//
+//        System.out.println(message5);
+//        System.out.println(message5.equals(message3));
+//        System.out.println(message5.equals(message4));
+//        System.out.println(message5.hashCode());
 
-        service.log((MessageOrder) null, message1, message2, message3);
-        service.log(MessageOrder.ASC, message1, message2, message3);
-        service.log(MessageOrder.DESC, message1, message2, message3, message4);
-
-        service.log(MessageOrder.ASC, (Doubling) null, message1, message2, message3, message4);
-        service.log(MessageOrder.ASC, Doubling.DISTINCT, message1, message2, message2, message2);
-        service.log(MessageOrder.ASC, Doubling.DOUBLES, message1, message2, message2, message2);
-        service.log(MessageOrder.DESC, Doubling.DISTINCT, message1, message2, message3, message3);
-        service.log(MessageOrder.DESC, Doubling.DOUBLES, message1, message2, message3, message3);
-
-        System.out.println(message5);
-        System.out.println(message5.equals(message3));
-        System.out.println(message5.equals(message4));
-        System.out.println(message5.hashCode());
+        // service.log(message0, message1, message2, message3, message4); // negative scenario
+        service.log(message1, message0); // negative scenario
     }
 }

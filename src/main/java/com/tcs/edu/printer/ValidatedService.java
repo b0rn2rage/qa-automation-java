@@ -9,9 +9,13 @@ public abstract class ValidatedService {
 
     /**
      * @param message - сообщение, которое будет провалидировано
-     * @return true - если валидация прошла успешно, false - если сообщение не прошло валидацию
      */
-    public boolean isArgsValid(Message message) {
-        return message != null && message.getBody() != null;
+    public void isArgsValid(Message message) {
+        if (message == null) {
+            throw new IllegalArgumentException("message is null");
+        }
+        if (message.getBody() == null){
+            throw new NullPointerException("message.getBody() is null");
+        }
     }
 }
