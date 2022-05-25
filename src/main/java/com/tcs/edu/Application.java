@@ -34,7 +34,8 @@ class Application {
 //        System.out.println(message5.equals(message4));
 //        System.out.println(message5.hashCode());
 
-        // service.log(message0, message1, message2, message3, message4); // negative scenario
-        service.log(message1, message0); // negative scenario
+//        service.log(message0, message1, message2, message3, message4); // negative scenario
+//        service.log(message1, message0); // negative scenario
+        service.log(null);
     }
 }
