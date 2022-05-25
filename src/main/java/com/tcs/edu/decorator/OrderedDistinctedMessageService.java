@@ -78,13 +78,15 @@ public class OrderedDistinctedMessageService extends ValidatedService implements
      * @param messages - Список дополнительных входящих сообщений
      */
     public void log(MessageOrder order, Doubling doubling, Message message, Message... messages) {
-        if (super.isArgsValid(message)) {
-            String currentDecoratedMessage;
-            currentDecoratedMessage = messageDecorator.decorate(message);
-            printer.print(pageDecorator.decorate(currentDecoratedMessage));
+        try {
+            super.isArgsValid(message);
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new LogException("message = null", e);
         }
-
         String currentDecoratedMessage;
+        currentDecoratedMessage = messageDecorator.decorate(message);
+        printer.print(pageDecorator.decorate(currentDecoratedMessage));
+
         // В printedMessages будут хранится НЕ ПОЛНОСТЬЮ напечатанные сообщения с timestamp,
         // а просто список "сырых" messages, которые уже были напечатаны,
         // так как если хранить вместе с timestamp, то дублей не будет никогда
@@ -92,8 +94,10 @@ public class OrderedDistinctedMessageService extends ValidatedService implements
         int counter = 0;
         if (order == MessageOrder.ASC || order == null) {
             for (Message currentMessage : messages) {
-                if (!super.isArgsValid(currentMessage)) {
-                    continue;
+                try {
+                    super.isArgsValid(currentMessage);
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    throw new LogException("message = null", e);
                 }
                 if (doubling == Doubling.DISTINCT) {
                     if (Inspector.isUnique(currentMessage.getBody(), printedMessages)) {
@@ -107,8 +111,10 @@ public class OrderedDistinctedMessageService extends ValidatedService implements
             }
         } else if (order == MessageOrder.DESC) {
             for (int i = messages.length - 1; i > -1; i--) {
-                if (!super.isArgsValid(messages[i])) {
-                    continue;
+                try {
+                    super.isArgsValid(messages[i]);
+                } catch (IllegalArgumentException | NullPointerException e) {
+                    throw new LogException("message = null", e);
                 }
                 if (doubling == Doubling.DISTINCT) {
                     if (Inspector.isUnique(messages[i].getBody(), printedMessages)) {
