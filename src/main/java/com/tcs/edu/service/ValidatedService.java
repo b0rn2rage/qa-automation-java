@@ -1,4 +1,4 @@
-package com.tcs.edu.printer;
+package com.tcs.edu.service;
 
 import com.tcs.edu.domain.Message;
 

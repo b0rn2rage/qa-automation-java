@@ -1,4 +1,4 @@
-package com.tcs.edu.domain;
+package com.tcs.edu.decorator;
 
 /**
  * Интерфейс для декорирования страниц
