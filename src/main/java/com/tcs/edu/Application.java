@@ -3,33 +3,34 @@ package com.tcs.edu;
 import com.tcs.edu.decorator.*;
 import com.tcs.edu.domain.Message;
 import com.tcs.edu.repository.SavingMessageService;
-import com.tcs.edu.service.MessageService;
-import com.tcs.edu.printer.ConsolePrinter;
-import com.tcs.edu.service.OrderedDistinctedMessageService;
 import com.tcs.edu.service.SavingMessageServiceImpl;
 
+import java.util.Collection;
 import java.util.UUID;
 
 class Application {
     public static void main(String[] args) {
-        Message message0 = new Message((Severity) null, (String) null);
-        Message message1 = new Message(Severity.MAJOR, null);
-        Message message2 = new Message((Severity) null, "Hello World!2");
-        Message message3 = new Message(Severity.REGULAR, "Hello World!3");
-        Message message4 = new Message(Severity.MINOR, "Hello World!4");
+        Message message1 = new Message(Severity.REGULAR, "Hello World!1");
+        Message message2 = new Message(Severity.MINOR, "Hello World!2");
+        Message message3 = new Message(Severity.MINOR, "Hello World!3");
 
         SavingMessageService savingMessageService = new SavingMessageServiceImpl();
 
-//        UUID generatedKey0 = savingMessageService.log(message0);
-//        UUID generatedKey1 = savingMessageService.log(message1);
-//        UUID generatedKey2 = savingMessageService.log(message2);
-        UUID generatedKey3 = savingMessageService.log(message3);
-        UUID generatedKey4 = savingMessageService.log(message4);
-//        System.out.println(savingMessageService.findByPrimaryKey(generatedKey0));
-//        System.out.println(savingMessageService.findByPrimaryKey(generatedKey1));
-//        System.out.println(savingMessageService.findByPrimaryKey(generatedKey2));
-        System.out.println(savingMessageService.findByPrimaryKey(generatedKey3));
-        System.out.println(savingMessageService.findByPrimaryKey(generatedKey4));
+        UUID generatedKey1 = savingMessageService.log(message1);
+        savingMessageService.log(message2);
+        savingMessageService.log(message3);
+
+        System.out.println("Считываем сообщение №1 по хеш ключу:");
+        System.out.println(savingMessageService.findByPrimaryKey(generatedKey1));
+
+        System.out.println("Считываем абсолютно все сообщения:");
+        final Collection<Message> allMessages = savingMessageService.findAll();
+        for (Message currentMessage : allMessages) {
+            System.out.println(currentMessage);
+        }
+
+        System.out.println("Считываем сообщения с уровнем важности = MINOR:");
+        System.out.println(savingMessageService.findAllBySeverity(Severity.MINOR));
 
 
 
