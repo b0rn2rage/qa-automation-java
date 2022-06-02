@@ -5,7 +5,6 @@ import com.tcs.edu.domain.Message;
 import com.tcs.edu.repository.SavingMessageService;
 import com.tcs.edu.service.SavingMessageServiceImpl;
 
-import java.util.Collection;
 import java.util.UUID;
 
 class Application {
@@ -24,14 +23,10 @@ class Application {
         System.out.println(savingMessageService.findByPrimaryKey(generatedKey1));
 
         System.out.println("Считываем абсолютно все сообщения:");
-        final Collection<Message> allMessages = savingMessageService.findAll();
-        for (Message currentMessage : allMessages) {
-            System.out.println(currentMessage);
-        }
+        System.out.println(savingMessageService.findAll());
 
         System.out.println("Считываем сообщения с уровнем важности = MINOR:");
         System.out.println(savingMessageService.findAllBySeverity(Severity.MINOR));
-
 
 
 //        MessageService service = new OrderedDistinctedMessageService(
