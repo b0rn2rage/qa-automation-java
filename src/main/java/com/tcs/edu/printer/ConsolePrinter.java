@@ -1,7 +1,5 @@
 package com.tcs.edu.printer;
 
-import com.tcs.edu.domain.Printer;
-
 /**
  * Служит для вывода текста в консоль
  *

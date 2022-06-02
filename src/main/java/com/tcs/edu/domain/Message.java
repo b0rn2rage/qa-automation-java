@@ -3,6 +3,7 @@ package com.tcs.edu.domain;
 import com.tcs.edu.decorator.Severity;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Класс с текстом сообщения и параметрами сообщения
@@ -10,6 +11,7 @@ import java.util.Objects;
 public class Message {
     private final Severity severity;
     private final String body;
+    private UUID id;
 
     /**
      * Конструктор класса
@@ -25,6 +27,27 @@ public class Message {
         return severity;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Message message = (Message) o;
+        return Objects.equals(id, message.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
     public String getBody() {
         return body;
     }
@@ -37,16 +60,4 @@ public class Message {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Message message = (Message) o;
-        return severity == message.severity && Objects.equals(body, message.body);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(severity, body);
-    }
 }

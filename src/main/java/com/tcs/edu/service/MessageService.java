@@ -1,7 +1,8 @@
-package com.tcs.edu.domain;
+package com.tcs.edu.service;
 
 import com.tcs.edu.decorator.Doubling;
 import com.tcs.edu.decorator.MessageOrder;
+import com.tcs.edu.domain.Message;
 
 /**
  * Интерфейс с методами, которые должен содержать каждый сервис по обработке сообщений

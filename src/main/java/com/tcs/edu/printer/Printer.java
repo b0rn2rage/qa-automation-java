@@ -1,4 +1,4 @@
-package com.tcs.edu.domain;
+package com.tcs.edu.printer;
 
 /**
  * Интерфейс с методами, которые должен содержать каждый принтер
