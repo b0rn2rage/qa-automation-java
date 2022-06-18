@@ -1,13 +1,9 @@
 import io.restassured.authentication.PreemptiveBasicAuthScheme;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
@@ -47,12 +43,20 @@ public class ApiCountryTests {
      * Добавляем две записи
      * Геттером считываем все записи из таблицы
      * Проверяем, что количество записей = 2
+     * Удаляем все после себя
      */
     @Test
     public void shouldGetAllCountries() throws SQLException {
         Statement sql = connection.createStatement();
         sql.executeUpdate("DELETE FROM country");
-        sql.executeUpdate("INSERT INTO country (id, country_name) VALUES (1, 'ru'), (2, 'en')");
+        PreparedStatement preparedSql = connection.prepareStatement(
+                "INSERT INTO country (id, country_name) VALUES (?, ?), (?, ?)"
+        );
+        preparedSql.setInt(1, 1);
+        preparedSql.setString(2, "ru");
+        preparedSql.setInt(3, 2);
+        preparedSql.setString(4, "en");
+        preparedSql.executeUpdate();
 
         try {
             when()
@@ -62,9 +66,13 @@ public class ApiCountryTests {
                     .body(
                             "size()", equalTo(2)
                     );
-        }
-        finally {
-            sql.executeUpdate("DELETE FROM country WHERE country_name in('ru', 'en')");
+        } finally {
+            preparedSql = connection.prepareStatement(
+                    "DELETE FROM country WHERE country_name in(?, ?)"
+            );
+            preparedSql.setString(1, "ru");
+            preparedSql.setString(2, "en");
+            preparedSql.executeUpdate();
         }
     }
 
@@ -76,8 +84,11 @@ public class ApiCountryTests {
      */
     @Test
     public void shouldCreateNewCountryWhenItUnique() throws SQLException {
-        Statement sql = connection.createStatement();
-        sql.executeUpdate("DELETE FROM country WHERE country_name = 'ru'");
+        PreparedStatement preparedSql = connection.prepareStatement(
+                "DELETE FROM country WHERE country_name = ?"
+        );
+        preparedSql.setString(1, "ru");
+        preparedSql.executeUpdate();
 
         try {
             given()
@@ -95,7 +106,11 @@ public class ApiCountryTests {
                     );
         }
         finally {
-            sql.executeUpdate("DELETE FROM country WHERE country_name = 'ru'");
+            preparedSql = connection.prepareStatement(
+                    "DELETE FROM country WHERE country_name = ?"
+            );
+            preparedSql.setString(1, "ru");
+            preparedSql.executeUpdate();
         }
     }
 
@@ -109,7 +124,12 @@ public class ApiCountryTests {
     public void shouldRenameCountryWhenItExist() throws SQLException {
         Statement sql = connection.createStatement();
         sql.executeUpdate("DELETE FROM country");
-        sql.executeUpdate("INSERT INTO country (id, country_name) VALUES (1, 'ru')");
+        PreparedStatement preparedSql = connection.prepareStatement(
+                "INSERT INTO country (id, country_name) VALUES (?, ?)"
+        );
+        preparedSql.setInt(1, 1);
+        preparedSql.setString(2, "ru");
+        preparedSql.executeUpdate();
 
         try {
             given()
@@ -123,9 +143,12 @@ public class ApiCountryTests {
                     .then()
                     .statusCode(200)
                     .body("countryName", is("xx"));
-        }
-        finally {
-            sql.executeUpdate("DELETE FROM country where id = 1");
+        } finally {
+            preparedSql = connection.prepareStatement(
+                    "DELETE FROM country WHERE country_name = ?"
+            );
+            preparedSql.setString(1, "ru");
+            preparedSql.executeUpdate();
         }
     }
 
@@ -139,7 +162,12 @@ public class ApiCountryTests {
     public void shouldDeleteCountryWhenItExist() throws SQLException {
         Statement sql = connection.createStatement();
         sql.executeUpdate("DELETE FROM country");
-        sql.executeUpdate("INSERT INTO country (id, country_name) VALUES (1, 'ru')");
+        PreparedStatement preparedSql = connection.prepareStatement(
+                "INSERT INTO country (id, country_name) VALUES (?, ?)"
+        );
+        preparedSql.setInt(1, 1);
+        preparedSql.setString(2, "ru");
+        preparedSql.executeUpdate();
 
         try {
             given()
@@ -152,9 +180,11 @@ public class ApiCountryTests {
                     .then()
                     .statusCode(204);
         } finally {
-            sql.executeUpdate("DELETE FROM country where id = 1");
+            preparedSql = connection.prepareStatement(
+                    "DELETE FROM country WHERE country_name = ?"
+            );
+            preparedSql.setString(1, "ru");
+            preparedSql.executeUpdate();
         }
-
-
     }
 }
